@@ -1,5 +1,5 @@
 //classe main - por enquanto vai estar aqui toda a bagunça seguida no tutorial
-var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3,
+var canvas, ctx, ALTURA, LARGURA, frames = 0,
 chao = {
   //isso virará uma classe no futuro
   y: 550,
@@ -13,38 +13,35 @@ chao = {
 },
 
 bloco = {
-  x: 0,
-  y: -15,
   altura: 10,
   largura: 10,
+  x: 295,
+  y: 15,
   cor: "#f1c40f",
   gravidade: 0.3,
-  velocidade: 0,
-  forcaDoPulo: 15,
-  thrust: 0,
-  thrust_power: 0.5,
-  qtdPulos: 0,
+  velocidadeY: 0,
+  thrustUp: 0,
+  thrustUp_power: 0.5,
+  vento: 0,
+  velocidadeX: 0,
+  thrustSideways: 0,
+  thrustSideways_power: 0.2,
 
   atualiza: function () {
-    this.velocidade += this.gravidade-this.thrust;
-    this.y += this.velocidade;
+    this.velocidadeY += this.gravidade-this.thrustUp;
+    this.y += this.velocidadeY;
+    this.velocidadeX += this.vento-this.thrustSideways;
+    this.x += this.velocidadeX;
+
 
     if (this.y > chao.y - this.altura) {
       this.y = chao.y - this.altura;
-      this.qtdPulos = 0;
-      this.velocidade = 0;
-    }
-  },
-
-  pula: function () {
-    if (this.qtdPulos < maxPulos) {
-      this.qtdPulos++;
-      this.velocidade = -this.forcaDoPulo;
+      this.velocidadeY = 0;
+      this.velocidadeX = 0;
     }
   },
 
   desenha: function () {
-    this.x =(LARGURA/2)-(this.largura/2);
     ctx.fillStyle = this.cor;
     ctx.fillRect(this.x, this.y, this.largura, this.altura);
   }
@@ -53,11 +50,41 @@ bloco = {
 ;
 
 function pressy(event){
-  bloco.thrust = bloco.thrust_power;
+  switch (event.key) {
+    case "ArrowUp":
+      bloco.thrustUp = bloco.thrustUp_power;
+      bloco.cor="#00f";
+      break;
+    case "ArrowRight":
+      bloco.thrustSideways = -bloco.thrustSideways_power;
+      bloco.cor="#f00";
+      break;
+    case "ArrowLeft":
+      bloco.thrustSideways = bloco.thrustSideways_power;
+      bloco.cor="#0f0";
+      break;
+    default:
+
+  }
 }
 
 function release(event){
-  bloco.thrust = 0;
+  switch (event.key) {
+    case "ArrowUp":
+      bloco.thrustUp = 0;
+      bloco.cor="#f1c40f";
+      break;
+    case "ArrowRight":
+      bloco.thrustSideways = 0;
+      bloco.cor="#f1c40f";
+      break;
+    case "ArrowLeft":
+      bloco.thrustSideways = 0;
+      bloco.cor="#f1c40f";
+      break;
+    default:
+
+  }
 }
 
 function roda() {
@@ -95,8 +122,8 @@ function main(){
 
   ctx = canvas.getContext("2d");
   document.body.appendChild(canvas);
-  document.addEventListener("mousedown",pressy);
-  document.addEventListener("mouseup",release);
+  document.addEventListener("keydown",pressy);
+  document.addEventListener("keyup",release);
 
   roda();
 
