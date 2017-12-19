@@ -1,4 +1,6 @@
 /*estilo*/
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+
 canvas{
   position: absolute;
   top: 0px;
@@ -6,5 +8,43 @@ canvas{
   left: 0px;
   right: 0px;
   margin: auto;
-  border: 1px solid #000;
+  border: 1px solid #ecf0f1;
+}
+
+.prblndrBody{
+  background-color: #222;
+}
+
+#prblndrInfo{
+  background-color: #333;
+  position:fixed;
+  width: 10em;
+  height: 100%;
+  top: 0px;
+  right: 0px;
+  padding-right: 1em;
+  padding-left: 1em;
+  float: right;
+
+  text-align: center;
+  font-family: 'Orbitron',sans-serif;
+  color: #ecf0f1;
+}
+
+#fuelBar{
+  position: relative;
+  right: 0px;
+  left: 0px;
+  top: -0.5em;
+  margin: 0px auto 0px auto;
+  width: 8em;
+  height: 1em;
+  border: 1px solid #ecf0f1;
+  padding: 1px;
+}
+
+#fuelLevel{
+  width: 80%;
+  height: 100%;
+  background-color: #9b59b6;
 }

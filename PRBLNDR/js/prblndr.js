@@ -4,7 +4,7 @@ chao = {
   //isso virará uma classe no futuro
   y: 550,
   altura: 50,
-  cor: "#ffdf70",
+  cor: "#95a5a6",
 
   desenha: function(){
     ctx.fillStyle = this.cor;
@@ -14,15 +14,15 @@ chao = {
 
 bloco = {
   x: 0,
-  y: -50,
-  altura: 50,
-  largura: 50,
-  cor: "#ff4e4e",
-  gravidade: 1.5,
+  y: -15,
+  altura: 10,
+  largura: 10,
+  cor: "#f1c40f",
+  gravidade: 0.3,
   velocidade: 0,
   forcaDoPulo: 15,
   thrust: 0,
-  thrust_power: 1.5,
+  thrust_power: 0.5,
   qtdPulos: 0,
 
   atualiza: function () {
@@ -74,7 +74,7 @@ function atualiza() {
 }
 
 function desenha() {
-  ctx.fillStyle = "#50beff";
+  ctx.fillStyle = "#2c3e50";
   ctx.fillRect(0,0,LARGURA,ALTURA);
   chao.desenha();
   bloco.desenha();
