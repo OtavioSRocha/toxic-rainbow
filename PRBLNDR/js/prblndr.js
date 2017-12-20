@@ -16,13 +16,13 @@ bloco = {
   altura: 10,
   largura: 10,
   x: 295,
-  y: 15,
+  y: -15,
   cor: "#f1c40f",
   gravidade: 0.3,
   velocidadeY: 0,
   thrustUp: 0,
   thrustUp_power: 0.5,
-  vento: 0,
+  vento: 0.1,
   velocidadeX: 0,
   thrustSideways: 0,
   thrustSideways_power: 0.2,
@@ -32,7 +32,22 @@ bloco = {
     this.y += this.velocidadeY;
     this.velocidadeX += this.vento-this.thrustSideways;
     this.x += this.velocidadeX;
-    COMBUSTIVEL -= this.thrustUp + Math.abs(this.thrustSideways);
+    if(COMBUSTIVEL>0){
+      COMBUSTIVEL -= this.thrustUp + Math.abs(this.thrustSideways);
+    }
+    else{
+      COMBUSTIVEL = 0;
+      this.thrustUp = 0;
+      this.thrustSideways = 0;
+    }
+
+    if(this.x>LARGURA+5){
+      this.x = -5;
+    }
+    else if (this.x<-5) {
+      this.x = LARGURA+5;
+    }
+
 
     if (this.y > chao.y - this.altura) {
       this.y = chao.y - this.altura;
@@ -50,21 +65,23 @@ bloco = {
 ;
 
 function pressy(event){
-  switch (event.key) {
-    case "ArrowUp":
+  if(COMBUSTIVEL>0){
+    switch (event.key) {
+      case "ArrowUp":
       bloco.thrustUp = bloco.thrustUp_power;
       bloco.cor="#00f";
       break;
-    case "ArrowRight":
+      case "ArrowRight":
       bloco.thrustSideways = -bloco.thrustSideways_power;
       bloco.cor="#f00";
       break;
-    case "ArrowLeft":
+      case "ArrowLeft":
       bloco.thrustSideways = bloco.thrustSideways_power;
       bloco.cor="#0f0";
       break;
-    default:
+      default:
 
+    }
   }
 }
 
@@ -102,7 +119,7 @@ function atualiza() {
   document.getElementById("windValue").innerHTML = bloco.vento.toFixed(2)+'ms';
   document.getElementById("gravityValue").innerHTML = bloco.gravidade.toFixed(2)+'G';
   document.getElementById("fuelValue").innerHTML = COMBUSTIVEL.toFixed(2)+'l | '+((COMBUSTIVEL/COMBUSTIVEL_MAX)*100).toFixed(2)+'%';
-  document.getElementById("fuelLevel").style.width = Math.abs(((COMBUSTIVEL/COMBUSTIVEL_MAX)*100).toFixed(2))+'%'; 
+  document.getElementById("fuelLevel").style.width = Math.abs(((COMBUSTIVEL/COMBUSTIVEL_MAX)*100).toFixed(2))+'%';
 }
 
 function desenha() {
