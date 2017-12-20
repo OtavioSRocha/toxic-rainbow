@@ -1,5 +1,5 @@
 //classe main - por enquanto vai estar aqui toda a bagunça seguida no tutorial
-var canvas, ctx, ALTURA, LARGURA, frames = 0,
+var canvas, ctx, ALTURA, LARGURA, COMBUSTIVEL_MAX=100, COMBUSTIVEL, frames = 0,
 chao = {
   //isso virará uma classe no futuro
   y: 550,
@@ -32,7 +32,7 @@ bloco = {
     this.y += this.velocidadeY;
     this.velocidadeX += this.vento-this.thrustSideways;
     this.x += this.velocidadeX;
-
+    COMBUSTIVEL -= this.thrustUp + Math.abs(this.thrustSideways);
 
     if (this.y > chao.y - this.altura) {
       this.y = chao.y - this.altura;
@@ -96,8 +96,13 @@ function roda() {
 
 function atualiza() {
   frames++;
-
   bloco.atualiza();
+  document.getElementById("ySpeedValue").innerHTML = bloco.velocidadeY.toFixed(2)+'ms';
+  document.getElementById("xSpeedValue").innerHTML = bloco.velocidadeX.toFixed(2)+'ms';
+  document.getElementById("windValue").innerHTML = bloco.vento.toFixed(2)+'ms';
+  document.getElementById("gravityValue").innerHTML = bloco.gravidade.toFixed(2)+'G';
+  document.getElementById("fuelValue").innerHTML = COMBUSTIVEL.toFixed(2)+'l | '+((COMBUSTIVEL/COMBUSTIVEL_MAX)*100).toFixed(2)+'%';
+  document.getElementById("fuelLevel").style.width = Math.abs(((COMBUSTIVEL/COMBUSTIVEL_MAX)*100).toFixed(2))+'%'; 
 }
 
 function desenha() {
@@ -115,6 +120,8 @@ function main(){
     LARGURA = 600;
     ALTURA = 600;
   }
+
+  COMBUSTIVEL = COMBUSTIVEL_MAX;
 
   canvas = document.createElement("canvas");
   canvas.width = LARGURA;
