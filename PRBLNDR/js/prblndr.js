@@ -12,17 +12,38 @@ chao = {
   }
 },
 
+moeda = {
+  altura: 10,
+  largura: 10,
+  x:0,
+  y:0,
+  gerado: 0,
+  pontos: -1,
+  
+  desenha: function(){
+    ctx.fillStyle = "#FF00FF";
+    if(this.gerado == 0) {
+    this.x = Math.floor(Math.random() * (LARGURA - moeda.largura));
+    this.y = Math.floor(Math.random() * (ALTURA - chao.altura - moeda.altura));
+    this.pontos = this.pontos+1;
+    this.gerado = 1;
+    }
+    console.log(this.pontos);
+    ctx.fillRect(this.x, this.y, this.largura, this.altura);
+  },
+},
+
 bloco = {
   altura: 10,
   largura: 10,
   x: 295,
   y: -15,
   cor: "#f1c40f",
-  gravidade: 0.3,
+  gravidade: 0.1,
   velocidadeY: 0,
   thrustUp: 0,
   thrustUp_power: 0.5,
-  vento: 0.1,
+  vento: 0,
   velocidadeX: 0,
   thrustSideways: 0,
   thrustSideways_power: 0.2,
@@ -40,25 +61,43 @@ bloco = {
       this.thrustUp = 0;
       this.thrustSideways = 0;
     }
+    
+    if(this.x >= LARGURA - this.largura){
+      this.x = 600 - this.largura;
+      this.velocidadeX = 0;
 
-    if(this.x>LARGURA+5){
-      this.x = -5;
     }
-    else if (this.x<-5) {
-      this.x = LARGURA+5;
+    else if (this.x <=   0) {
+      this.x = 0;
+      this.velocidadeX = 0;
     }
-
 
     if (this.y > chao.y - this.altura) {
       this.y = chao.y - this.altura;
       this.velocidadeY = 0;
       this.velocidadeX = 0;
     }
+
+    if (this.y <= 0) {
+      this.y = 0;
+      this.velocidadeY = 0;
+    }
+
+
   },
 
   desenha: function () {
     ctx.fillStyle = this.cor;
     ctx.fillRect(this.x, this.y, this.largura, this.altura);
+  },
+
+  pegaMoeda: function() {
+    if(
+      ((this.x <= moeda.x && this.y <= moeda.y) && (this.x >= moeda.x - moeda.largura && this.y >= moeda.y - moeda.altura)) || 
+      ((this.x >= moeda.x && this.y >= moeda.y) && (this.x <= moeda.x + moeda.largura && this.y <= moeda.y + moeda.altura))
+    ) {
+      moeda.gerado = 0;
+    }
   }
 
 }
@@ -114,6 +153,7 @@ function roda() {
 function atualiza() {
   frames++;
   bloco.atualiza();
+  document.getElementById("moedas").innerHTML = moeda.pontos;
   document.getElementById("ySpeedValue").innerHTML = bloco.velocidadeY.toFixed(2)+'ms';
   document.getElementById("xSpeedValue").innerHTML = bloco.velocidadeX.toFixed(2)+'ms';
   document.getElementById("windValue").innerHTML = bloco.vento.toFixed(2)+'ms';
@@ -127,6 +167,8 @@ function desenha() {
   ctx.fillRect(0,0,LARGURA,ALTURA);
   chao.desenha();
   bloco.desenha();
+  moeda.desenha();
+  bloco.pegaMoeda();
 }
 
 function main(){
